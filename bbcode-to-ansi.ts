@@ -9,7 +9,7 @@ class BBCodeToAnsi {
     if (fgcolorText !== null) {
       let whitespaceReplacement: string = fgcolorText[1].replace(/./g, " ");
       bbcodeText = bbcodeText.replace(fgcolorText[1], whitespaceReplacement);
-      bbcodeText = bbcodeText.replace("fgcolor", "bgcolor");
+      bbcodeText = bbcodeText.replaceAll("fgcolor", "bgcolor");
     }
 
     let parsedBBCode: string = bbcodeText
@@ -192,6 +192,7 @@ class BBCodeToAnsi {
       .replaceAll("[color=pink]", "\u001b[38;2;255;192;203m")
       .replaceAll("[color=white_smoke]", "\u001b[38;2;245;245;245m")
       .replaceAll("[color=yellow_green]", "\u001b[38;2;154;205;50m")
+      .replaceAll("[/color]", "\u001b[39m")
 
       // Background color (highlighting text).
       .replaceAll("[bgcolor=black]", "\u001b[48;2;0;0;0m")
@@ -335,7 +336,8 @@ class BBCodeToAnsi {
       .replaceAll("[bgcolor=pale_violetred]", "\u001b[48;2;219;112;147m")
       .replaceAll("[bgcolor=pink]", "\u001b[48;2;255;192;203m")
       .replaceAll("[bgcolor=white_smoke]", "\u001b[48;2;245;245;245m")
-      .replaceAll("[bgcolor=yellow_green]", "\u001b[48;2;154;205;50m");
+      .replaceAll("[bgcolor=yellow_green]", "\u001b[48;2;154;205;50m")
+      .replace("[/bgcolor]", "\u001b[49m");
 
     return parsedBBCode;
   }
