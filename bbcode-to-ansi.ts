@@ -1,6 +1,5 @@
 class BBCodeToAnsi {
   parse(bbcodeText: string = ""): string {
-
     // Hacky workaround for foreground color
     let fgcolorText = bbcodeText.match(
       /\[fgcolor(?:=[^\]]+)?\](.*?)\[\/fgcolor\]/
@@ -36,9 +35,9 @@ class BBCodeToAnsi {
 
       // Without knowing the terminal width, we can't fully emulate [center] and [right] behavior.
       // This is only an approximation that doesn't take the terminal width into account.
-      .replaceAll("[center]", "\n\t\t\t")
+      .replaceAll("[center]", "\t\t\t")
       .replaceAll("[/center]", "")
-      .replaceAll("[right]", "\n\t\t\t\t\t\t")
+      .replaceAll("[right]", "\t\t\t\t\t\t")
       .replaceAll("[/right]", "")
 
       // URL (link).
@@ -352,7 +351,7 @@ class BBCodeToAnsi {
       .replaceAll("[bgcolor=yellow_green]", "\u001b[48;2;154;205;50m")
       .replace("[/bgcolor]", "\u001b[49m");
 
-    return parsedBBCode;
+    return parsedBBCode + "\u001b[39m" + "\u001b[49m";
   }
 }
 
