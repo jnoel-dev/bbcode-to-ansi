@@ -1,4 +1,15 @@
 class BBCodeToAnsi {
+
+  defaultAnsiTextColor: string;
+
+  constructor(defaultAnsiTextColor: string = "") {
+    this.defaultAnsiTextColor = defaultAnsiTextColor
+  }
+
+  setDefaultAnsiTextColor(defaultAnsiTextColor: string = ""){
+    this.defaultAnsiTextColor = defaultAnsiTextColor
+  }
+
   parse(bbcodeText: string = ""): string {
     // Hacky workaround for foreground color
     let fgcolorText = bbcodeText.match(
@@ -352,7 +363,7 @@ class BBCodeToAnsi {
       .replaceAll("[/bgcolor]", "\u001b[49m");
 
     // Reset any active ansi formatting potentially applied above. This ensures terminal is reset for standard output afterwords.
-    return parsedBBCode + "\u001b[39m" + "\u001b[49m" + "\u001b[22m" + "\u001b[23m" + "\u001b[24m" + "\u001b[29m" +"\u001b[22m";
+    return this.defaultAnsiTextColor + parsedBBCode + "\u001b[39m" + "\u001b[49m" + "\u001b[22m" + "\u001b[23m" + "\u001b[24m" + "\u001b[29m" +"\u001b[22m" + this.defaultAnsiTextColor;
   }
 }
 
