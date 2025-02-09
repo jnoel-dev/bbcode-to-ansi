@@ -2,7 +2,7 @@
   "name": "bbcode-to-ansi",
   "version": "1.0.0",
   "description": "Parses bbcode to ansi.",
-  "main": "./bbcode-to-ansi.ts",
+  "main": "./bbcode-to-ansi.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
