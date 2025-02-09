@@ -1,6 +1,5 @@
 class BBCodeToAnsi {
   parse(bbcodeText: string = ""): string {
-    bbcodeText = "test[fgcolor=blue]hello world[/fgcolor]";
 
     // Hacky workaround for foreground color
     let fgcolorText = bbcodeText.match(
