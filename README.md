@@ -15,5 +15,5 @@ bbcodeParser.parse(bbcOutput);
 ```
 ## Limitations
  - Output terminal must support 24bit true color for all BBCode color options
- - Only the following tags are supported `b` `i` `u` `s` `indent` `code` `center` `right` `url` `color`
+ - Only the following tags are supported `b` `i` `u` `s` `indent` `code` `center` `right` `url` `color` `bgcolor` `fgcolor`
  - If named colors are used, all spaces in the color name must be replaced with an underscore. Example: use`[color=dark_goldenrod]` instead of `[color=darkgoldenrod]`
