@@ -351,7 +351,8 @@ class BBCodeToAnsi {
       .replaceAll("[bgcolor=yellow_green]", "\u001b[48;2;154;205;50m")
       .replace("[/bgcolor]", "\u001b[49m");
 
-    return parsedBBCode + "\u001b[39m" + "\u001b[49m";
+    // Reset any active ansi formatting potentially applied above. This ensures terminal is reset for standard output afterwords.
+    return parsedBBCode + "\u001b[39m" + "\u001b[49m" + "\u001b[22m" + "\u001b[23m" + "\u001b[24m" + "\u001b[29m" +"\u001b[22m";
   }
 }
 
