@@ -4,18 +4,48 @@ class BBCodeToAnsi {
     constructor(defaultAnsiTextColor = "") {
         this.defaultAnsiTextColor = defaultAnsiTextColor;
     }
+    hexToRgb(hex, colorFormatType) {
+        const bigint = parseInt(hex.slice(1), 16);
+        const r = (bigint >> 16) & 255;
+        const g = (bigint >> 8) & 255;
+        const b = bigint & 255;
+        return `\u001b[${colorFormatType};2;${r};${g};${b}m`;
+    }
+    parseHexColorTags(bbcodeText, tagString, colorFormatType) {
+        // Covert any hex values to rgb
+        const tagStringRegex = new RegExp(`\\[${tagString}=(#[A-Fa-f0-9]{6})\\]`);
+        const tagStringRegexGlobal = new RegExp(tagStringRegex.source, "g");
+        let bbcodeTextFormatted = bbcodeText;
+        const hexColorText = bbcodeText.match(tagStringRegexGlobal);
+        if (hexColorText !== null) {
+            hexColorText.forEach((hexColorTagSet) => {
+                const textToBeFormatted = hexColorTagSet.match(tagStringRegex)[1];
+                const replacementText = this.hexToRgb(textToBeFormatted, colorFormatType);
+                bbcodeTextFormatted = bbcodeTextFormatted.replace(`[${tagString}=${textToBeFormatted}]`, replacementText);
+            });
+        }
+        return bbcodeTextFormatted;
+    }
     setDefaultAnsiTextColor(defaultAnsiTextColor = "") {
         this.defaultAnsiTextColor = defaultAnsiTextColor;
     }
     parse(bbcodeText = "") {
-        // Hacky workaround for foreground color
-        let fgcolorText = bbcodeText.match(/\[fgcolor(?:=[^\]]+)?\](.*?)\[\/fgcolor\]/);
+        // Hacky workaround foreground color. whitespace + background color to emulate foreground color
+        const tagStringRegex = new RegExp("\\[fgcolor(?:=[^\\]]+)?\\](.*?)\\[/fgcolor\\]");
+        const tagStringRegexGlobal = new RegExp(tagStringRegex.source, "g");
+        const fgcolorText = bbcodeText.match(tagStringRegexGlobal);
         if (fgcolorText !== null) {
-            let whitespaceReplacement = fgcolorText[1].replace(/./g, " ");
-            bbcodeText = bbcodeText.replace(fgcolorText[1], whitespaceReplacement);
+            fgcolorText.forEach((fgcolorTagSet) => {
+                const textToBeFormatted = fgcolorTagSet.match(tagStringRegex)[1];
+                const replacementText = textToBeFormatted.replace(/./g, " ");
+                bbcodeText = bbcodeText.replace(textToBeFormatted, replacementText);
+            });
             bbcodeText = bbcodeText.replaceAll("fgcolor", "bgcolor");
         }
-        let parsedBBCode = bbcodeText
+        bbcodeText = this.parseHexColorTags(bbcodeText, "color", 38);
+        bbcodeText = this.parseHexColorTags(bbcodeText, "fgcolor", 38);
+        bbcodeText = this.parseHexColorTags(bbcodeText, "bgcolor", 48);
+        const parsedBBCode = bbcodeText
             .replaceAll("[b]", "\u001b[1m")
             .replaceAll("[/b]", "\u001b[22m")
             // Italic.
@@ -350,7 +380,16 @@ class BBCodeToAnsi {
             .replaceAll("[bgcolor=yellow_green]", "\u001b[48;2;154;205;50m")
             .replaceAll("[/bgcolor]", "\u001b[49m");
         // Reset any active ansi formatting potentially applied above. This ensures terminal is reset for standard output afterwords.
-        return this.defaultAnsiTextColor + parsedBBCode + "\u001b[39m" + "\u001b[49m" + "\u001b[22m" + "\u001b[23m" + "\u001b[24m" + "\u001b[29m" + "\u001b[22m" + this.defaultAnsiTextColor;
+        return (this.defaultAnsiTextColor +
+            parsedBBCode +
+            "\u001b[39m" +
+            "\u001b[49m" +
+            "\u001b[22m" +
+            "\u001b[23m" +
+            "\u001b[24m" +
+            "\u001b[29m" +
+            "\u001b[22m" +
+            this.defaultAnsiTextColor);
     }
 }
 exports.default = BBCodeToAnsi;
