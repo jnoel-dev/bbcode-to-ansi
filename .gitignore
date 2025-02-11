@@ -2,3 +2,4 @@
 /.vscode
 
 bbcode-to-ansi.js
+bbcode-to-ansi.d.ts
