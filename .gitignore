@@ -1,2 +1,4 @@
 /node_modules
 /.vscode
+
+.bbcode-to-ansi.js
