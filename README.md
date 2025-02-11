@@ -17,6 +17,6 @@ bbcodeParser.parse(bbcOutput);
  - Supports all 140 standard named colors with or without underscores in name
 
 ## Limitations
- - Output terminal must support 24bit true color for all BBCode color options
+ - Output terminal must support 24bit true color for all BBCode color options.
  - Only the following tags are supported `b` `i` `u` `s` `indent` `code` `center` `right` `url` `color` `bgcolor` `fgcolor`
  - `center` and `right` tags are emulated with spaces. May not be accurate depending on terminal size.
